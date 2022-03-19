@@ -1,39 +1,99 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  trelloBasic
+  base
 
-  Sample SAM Template for trelloBasic
-  
+  Sample SAM Template for base
+
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
     Timeout: 3
+    Runtime: nodejs14.x
+    Architectures:
+      - x86_64
+    CodeUri: src/
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  # get card function
+  GetCardFunction:
+    Type: AWS::Serverless::Function
     Properties:
-      CodeUri: hello-world/
-      Handler: app.lambdaHandler
-      Runtime: nodejs14.x
-      Architectures:
-        - x86_64
+      Handler: app.getCardHandler
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        GetCard:
+          Type: Api
           Properties:
-            Path: /hello
+            Path: /cards
             Method: get
-    Metadata: # Manage esbuild properties
+    Metadata:
       BuildMethod: esbuild
       BuildProperties:
         Minify: true
         Target: "es2020"
         Sourcemap: true
-        EntryPoints: 
-        - app.ts
+        EntryPoints:
+          - app.ts
 
+  # update card function
+  UpdateCardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.updateCardHandler
+      Events:
+        UpdateCard:
+          Type: Api
+          Properties:
+            Path: /cards/{id}
+            Method: put
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+
+  # create card function
+  CreateCardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.createCardHandler
+      Events:
+        CreateCard:
+          Type: Api
+          Properties:
+            Path: /cards
+            Method: post
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
+
+  # delete card function
+  DeleteCardFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.deleteCardHandler
+      Events:
+        DeleteCard:
+          Type: Api
+          Properties:
+            Path: /cards/{id}
+            Method: delete
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
