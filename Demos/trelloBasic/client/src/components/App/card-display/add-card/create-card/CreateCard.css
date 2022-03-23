@@ -1,0 +1,23 @@
+.add-card-success{
+    background-color: #5aac44;
+    border: none;
+    box-shadow:none;
+    font-size: 14px;
+    line-height: 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.input-button{
+    border:none;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin: 0 0 16px;
+    padding: 8px;
+}
+
+.close-add-card-button{
+    margin-left: 15px;
+
+}

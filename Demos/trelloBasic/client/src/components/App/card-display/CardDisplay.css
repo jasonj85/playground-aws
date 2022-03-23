@@ -1,0 +1,35 @@
+.card-container{
+    height: 400px;
+    width: 272px;
+    margin: 0 4px;
+    background-color: #ebecf0;
+    margin-left: 12px;
+    border-radius: 5px;
+    padding: 3px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-header{
+    margin: 7px 0px 7px 7px;
+    font-weight: bold;
+}
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+}
+
+.card-thumbnail {
+    display: flex;
+    justify-content: space-between;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin: 0 5px 6px;
+    padding: 8px;
+}
+
+.card-thumbnail:hover{
+    background-color: #f4f5f7;
+}

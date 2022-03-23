@@ -116,6 +116,26 @@ Resources:
         Sourcemap: true
         EntryPoints:
           - app.ts
+  # get options
+  GetOptionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: app.getOptionsHandler
+      Events:
+        DeleteCard:
+          Type: HttpApi
+          Properties:
+            RestApiId: TrelloHttpApi
+            Path: /{cors+}
+            Method: OPTIONS
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "es2020"
+        Sourcemap: true
+        EntryPoints:
+          - app.ts
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM

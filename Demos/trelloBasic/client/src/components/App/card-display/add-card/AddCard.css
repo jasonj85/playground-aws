@@ -1,0 +1,9 @@
+.add-card{
+    margin-top: auto;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.add-card:hover{
+    background-color: #dadce0;
+}
