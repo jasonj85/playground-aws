@@ -1,0 +1,26 @@
+{
+  "name": "spaceFinder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/uuid": "^8.3.4",
+    "aws-sdk": "^2.1100.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "aws-cdk": "^2.17.0",
+    "aws-cdk-lib": "^2.17.0",
+    "constructs": "^10.0.94",
+    "esbuild": "^0.14.27",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
