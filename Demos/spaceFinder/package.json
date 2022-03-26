@@ -5,9 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@types/aws-lambda": "^8.10.93",
-    "@types/uuid": "^8.3.4",
-    "aws-sdk": "^2.1100.0",
-    "uuid": "^8.3.2"
+    "aws-sdk": "^2.1100.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",

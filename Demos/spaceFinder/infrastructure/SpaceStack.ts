@@ -1,5 +1,4 @@
 import { Stack, StackProps, aws_lambda } from "aws-cdk-lib";
-import { Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import { LambdaIntegration, RestApi } from "aws-cdk-lib/aws-apigateway";
 import { Construct } from "constructs";
@@ -13,6 +12,10 @@ export class SpaceStack extends Stack {
     tableName: "SpacesTable",
     primaryKey: "spaceId",
     createLambdaPath: "Create",
+    readLambdaPath: "Read",
+    updateLambdaPath: "Update",
+    deleteLambdaPath: "Delete",
+    secondaryIndexes: ["location"],
   });
 
   constructor(scope: Construct, id: string, props: StackProps) {
@@ -50,5 +53,8 @@ export class SpaceStack extends Stack {
     // Spaces Api Lambda integration
     const spaceResource = this.api.root.addResource("spaces");
     spaceResource.addMethod("POST", this.spacesTable.createLambdaIntegration);
+    spaceResource.addMethod("GET", this.spacesTable.readLambdaIntegration);
+    spaceResource.addMethod("PUT", this.spacesTable.updateLambdaIntegration);
+    spaceResource.addMethod("DELETE", this.spacesTable.deleteLambdaIntegration);
   }
 }
