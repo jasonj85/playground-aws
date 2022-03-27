@@ -60,7 +60,7 @@
         "aws:cdk:path": "SpaceFinder/SpaceApi/Account"
       }
     },
-    "SpaceApiDeploymentA2B9E765e856aa6d7014720c5b3a26efff553575": {
+    "SpaceApiDeploymentA2B9E765708eb07d45fb4b49d47133a858cd83ef": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -88,7 +88,7 @@
           "Ref": "SpaceApi1B373D2B"
         },
         "DeploymentId": {
-          "Ref": "SpaceApiDeploymentA2B9E765e856aa6d7014720c5b3a26efff553575"
+          "Ref": "SpaceApiDeploymentA2B9E765708eb07d45fb4b49d47133a858cd83ef"
         },
         "StageName": "prod"
       },
@@ -211,7 +211,10 @@
         "RestApiId": {
           "Ref": "SpaceApi1B373D2B"
         },
-        "AuthorizationType": "NONE",
+        "AuthorizationType": "COGNITO_USER_POOLS",
+        "AuthorizerId": {
+          "Ref": "SpaceUserAuthorizer401AE1AA"
+        },
         "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
@@ -911,7 +914,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "3e452059b1cdb1ec26505c133eb5714d67c4d833be6be35bc78c51e6faded09b.zip"
+          "S3Key": "e32a2d5db38cca99234887314a932655b2e8ba30ae5083a7fd66f30747648777.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -936,7 +939,7 @@
       ],
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/SpacesTable-Create/Resource",
-        "aws:asset:path": "asset.3e452059b1cdb1ec26505c133eb5714d67c4d833be6be35bc78c51e6faded09b",
+        "aws:asset:path": "asset.e32a2d5db38cca99234887314a932655b2e8ba30ae5083a7fd66f30747648777",
         "aws:asset:is-bundled": true,
         "aws:asset:property": "Code"
       }
@@ -1158,7 +1161,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "5e360efe78e0b1fe682a4bf075382e5f81d3a6f24328b678a4dbd8517215a9d2.zip"
+          "S3Key": "85fbb09559ce693c7cfb897e2485990ec549ce6b53ee7e31db8572f2864eb944.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -1183,7 +1186,7 @@
       ],
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/SpacesTable-Update/Resource",
-        "aws:asset:path": "asset.5e360efe78e0b1fe682a4bf075382e5f81d3a6f24328b678a4dbd8517215a9d2",
+        "aws:asset:path": "asset.85fbb09559ce693c7cfb897e2485990ec549ce6b53ee7e31db8572f2864eb944",
         "aws:asset:is-bundled": true,
         "aws:asset:property": "Code"
       }
@@ -1280,7 +1283,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "564cd67044bbc1c80e465a99548b8c21c380ffb75e975cd3bec92630c3062d39.zip"
+          "S3Key": "73917ef73fde76dac2b8f91e2ff27c822118fa9d035660135ba3b7f843748bce.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -1305,9 +1308,122 @@
       ],
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/SpacesTable-Delete/Resource",
-        "aws:asset:path": "asset.564cd67044bbc1c80e465a99548b8c21c380ffb75e975cd3bec92630c3062d39",
+        "aws:asset:path": "asset.73917ef73fde76dac2b8f91e2ff27c822118fa9d035660135ba3b7f843748bce",
         "aws:asset:is-bundled": true,
         "aws:asset:property": "Code"
+      }
+    },
+    "SpaceUserPool6AB542DC": {
+      "Type": "AWS::Cognito::UserPool",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2
+            }
+          ]
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": false
+        },
+        "AliasAttributes": [
+          "email"
+        ],
+        "AutoVerifiedAttributes": [
+          "email"
+        ],
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolName": "SpaceUserPool",
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}"
+        }
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/SpaceUserPool/Resource"
+      }
+    },
+    "SpaceUserPoolSpaceUserPoolClient91C675C0": {
+      "Type": "AWS::Cognito::UserPoolClient",
+      "Properties": {
+        "UserPoolId": {
+          "Ref": "SpaceUserPool6AB542DC"
+        },
+        "AllowedOAuthFlows": [
+          "implicit",
+          "code"
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "profile",
+          "phone",
+          "email",
+          "openid",
+          "aws.cognito.signin.user.admin"
+        ],
+        "CallbackURLs": [
+          "https://example.com"
+        ],
+        "ClientName": "SpaceUserPoolClient",
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_ADMIN_USER_PASSWORD_AUTH",
+          "ALLOW_CUSTOM_AUTH",
+          "ALLOW_USER_SRP_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH"
+        ],
+        "GenerateSecret": false,
+        "SupportedIdentityProviders": [
+          "COGNITO"
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/SpaceUserPool/SpaceUserPoolClient/Resource"
+      }
+    },
+    "SpaceUserAuthorizer401AE1AA": {
+      "Type": "AWS::ApiGateway::Authorizer",
+      "Properties": {
+        "Name": "SpaceUserAuthorizer",
+        "RestApiId": {
+          "Ref": "SpaceApi1B373D2B"
+        },
+        "Type": "COGNITO_USER_POOLS",
+        "IdentitySource": "method.request.header.Authorization",
+        "ProviderARNs": [
+          {
+            "Fn::GetAtt": [
+              "SpaceUserPool6AB542DC",
+              "Arn"
+            ]
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/SpaceUserAuthorizer/Resource"
+      }
+    },
+    "admins": {
+      "Type": "AWS::Cognito::UserPoolGroup",
+      "Properties": {
+        "UserPoolId": {
+          "Ref": "SpaceUserPool6AB542DC"
+        },
+        "GroupName": "admins"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/admins"
       }
     },
     "helloWorldLambdaNodeJsServiceRoleA92626BD": {
@@ -1375,7 +1491,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "63c1d37f3f8ffe9a59d868162c6cc4b6efbc0361b8e4ffcfbc6eebed9a10ec95.zip"
+          "S3Key": "1b8945bb62d7493e3d0a01416ccc838aa78cb16748606b27a486400dfe5f3925.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -1397,7 +1513,7 @@
       ],
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/helloWorldLambdaNodeJs/Resource",
-        "aws:asset:path": "asset.63c1d37f3f8ffe9a59d868162c6cc4b6efbc0361b8e4ffcfbc6eebed9a10ec95",
+        "aws:asset:path": "asset.1b8945bb62d7493e3d0a01416ccc838aa78cb16748606b27a486400dfe5f3925",
         "aws:asset:is-bundled": true,
         "aws:asset:property": "Code"
       }
@@ -1405,7 +1521,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WQy07DMBBFv6V7dyBQxDotYsdDhX00sYcwSWxHsU0VRfl37JiqZXXPXM3D13dQPMLtBk9uK1W37bmG+cOj7ES0qhkHbtDTCSeYj+R8ObA4fJkrLKW0wXjxRENvJ00Ro3tVxW0NJS9DHLVhlLRHdyn+dmZ+If9tVbIyLYJRx/O2z31J323PckplpkX0qGuFMCeLRs3OsTWp4TkY6SMvQk0GtVUx4SfWedkK5+HKWEWtg9dVznPC3VfoHHkHZZJYwz7IjnyKsKQtb8EPwV/SrH0pLpvmX7TIB2sU5/ekc9C6m59iB8UD7DatY96O8TdZExyz/gLsxHOdoQEAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WRQU/DMAyFf8vuWWAwxLkbghMwDThPWWqKtzSu4oSpVP3vJM26jQMnf36qX+zXGzm7l9cTdeCpLvdTg1vZvXml9yJKm041WCkPB9XKbg3siwbF8tNeYKE1BevFAzSG2hoiRvWii24VJC1DHKXgNCwUn5ujZ+Zn8F9UJmkkqix6+mBwKyLDRYiywx9wwwKnrheo6rgnmWyY6ooM6ja1mXphVL0tleySBK5GZiSbPngMVvvIvShbq2oqYxTvapvNBhiHN5ZK2LF8Gco4J/h2o5jBsyxSib1cBL0HP9yq8xWyG+9IticeYWnwGOH/ypOj0PR9kl6Db4I/5zg8nIJGW/0JNfKSbIn5wLS/3PHV92wuZ3dyPtkx4tTF/4g1yHWuv7aUjj0bAgAA"
       },
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/CDKMetadata/Default"
@@ -1438,6 +1554,16 @@
             "/"
           ]
         ]
+      }
+    },
+    "UserPoolId": {
+      "Value": {
+        "Ref": "SpaceUserPool6AB542DC"
+      }
+    },
+    "UserPoolClientId": {
+      "Value": {
+        "Ref": "SpaceUserPoolSpaceUserPoolClient91C675C0"
       }
     }
   },
