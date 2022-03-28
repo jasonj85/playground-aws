@@ -1414,13 +1414,204 @@
         "aws:cdk:path": "SpaceFinder/SpaceUserAuthorizer/Resource"
       }
     },
+    "SpaceIdentityPool": {
+      "Type": "AWS::Cognito::IdentityPool",
+      "Properties": {
+        "AllowUnauthenticatedIdentities": true,
+        "CognitoIdentityProviders": [
+          {
+            "ClientId": {
+              "Ref": "SpaceUserPoolSpaceUserPoolClient91C675C0"
+            },
+            "ProviderName": {
+              "Fn::GetAtt": [
+                "SpaceUserPool6AB542DC",
+                "ProviderName"
+              ]
+            }
+          }
+        ],
+        "IdentityPoolName": "SpaceIdentityPool"
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/SpaceIdentityPool"
+      }
+    },
+    "CognitoDefaultAuthenticatedRoleC5D5C31E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": {
+                    "Ref": "SpaceIdentityPool"
+                  }
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/CognitoDefaultAuthenticatedRole/Resource"
+      }
+    },
+    "CognitoDefaultUnauthenticatedRoleABBF7267": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": {
+                    "Ref": "SpaceIdentityPool"
+                  }
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "unauthenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/CognitoDefaultUnauthenticatedRole/Resource"
+      }
+    },
+    "CognitoDefaultAdminRole142FBDE3": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRoleWithWebIdentity",
+              "Condition": {
+                "StringEquals": {
+                  "cognito-identity.amazonaws.com:aud": {
+                    "Ref": "SpaceIdentityPool"
+                  }
+                },
+                "ForAnyValue:StringLike": {
+                  "cognito-identity.amazonaws.com:amr": "authenticated"
+                }
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Federated": "cognito-identity.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/CognitoDefaultAdminRole/Resource"
+      }
+    },
+    "CognitoDefaultAdminRoleDefaultPolicy4BFCA7C8": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:ListAllMyBuckets",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "CognitoDefaultAdminRoleDefaultPolicy4BFCA7C8",
+        "Roles": [
+          {
+            "Ref": "CognitoDefaultAdminRole142FBDE3"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/CognitoDefaultAdminRole/DefaultPolicy/Resource"
+      }
+    },
+    "RolesAttachment": {
+      "Type": "AWS::Cognito::IdentityPoolRoleAttachment",
+      "Properties": {
+        "IdentityPoolId": {
+          "Ref": "SpaceIdentityPool"
+        },
+        "RoleMappings": {
+          "adminsMapping": {
+            "AmbiguousRoleResolution": "AuthenticatedRole",
+            "IdentityProvider": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::GetAtt": [
+                      "SpaceUserPool6AB542DC",
+                      "ProviderName"
+                    ]
+                  },
+                  ":",
+                  {
+                    "Ref": "SpaceUserPoolSpaceUserPoolClient91C675C0"
+                  }
+                ]
+              ]
+            },
+            "Type": "Token"
+          }
+        },
+        "Roles": {
+          "authenticated": {
+            "Fn::GetAtt": [
+              "CognitoDefaultAuthenticatedRoleC5D5C31E",
+              "Arn"
+            ]
+          },
+          "unauthenticated": {
+            "Fn::GetAtt": [
+              "CognitoDefaultUnauthenticatedRoleABBF7267",
+              "Arn"
+            ]
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/RolesAttachment"
+      }
+    },
     "admins": {
       "Type": "AWS::Cognito::UserPoolGroup",
       "Properties": {
         "UserPoolId": {
           "Ref": "SpaceUserPool6AB542DC"
         },
-        "GroupName": "admins"
+        "GroupName": "admins",
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "CognitoDefaultAdminRole142FBDE3",
+            "Arn"
+          ]
+        }
       },
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/admins"
@@ -1491,7 +1682,7 @@
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
           },
-          "S3Key": "1b8945bb62d7493e3d0a01416ccc838aa78cb16748606b27a486400dfe5f3925.zip"
+          "S3Key": "4b0e135bc82468192a4d0cebc535aa84844249196355f2ce16f6a9793890afb8.zip"
         },
         "Role": {
           "Fn::GetAtt": [
@@ -1513,7 +1704,7 @@
       ],
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/helloWorldLambdaNodeJs/Resource",
-        "aws:asset:path": "asset.1b8945bb62d7493e3d0a01416ccc838aa78cb16748606b27a486400dfe5f3925",
+        "aws:asset:path": "asset.4b0e135bc82468192a4d0cebc535aa84844249196355f2ce16f6a9793890afb8",
         "aws:asset:is-bundled": true,
         "aws:asset:property": "Code"
       }
@@ -1521,7 +1712,7 @@
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/3WRQU/DMAyFf8vuWWAwxLkbghMwDThPWWqKtzSu4oSpVP3vJM26jQMnf36qX+zXGzm7l9cTdeCpLvdTg1vZvXml9yJKm041WCkPB9XKbg3siwbF8tNeYKE1BevFAzSG2hoiRvWii24VJC1DHKXgNCwUn5ujZ+Zn8F9UJmkkqix6+mBwKyLDRYiywx9wwwKnrheo6rgnmWyY6ooM6ja1mXphVL0tleySBK5GZiSbPngMVvvIvShbq2oqYxTvapvNBhiHN5ZK2LF8Gco4J/h2o5jBsyxSib1cBL0HP9yq8xWyG+9IticeYWnwGOH/ypOj0PR9kl6Db4I/5zg8nIJGW/0JNfKSbIn5wLS/3PHV92wuZ3dyPtkx4tTF/4g1yHWuv7aUjj0bAgAA"
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/2WRT0/DMAzFP8vuWWAwxLkbAnEApgHnKUtC562JqzhhKlW/O0mz7g+c/HtPsZVn3/DJPb8eiT2NpdqNK1jz9t0LuWPRWrWihlJ4vRcNb5eafFEDm3/ZMyykxGA9e9B1hY3REaN7puK0UicvQ2zF4KSeCTqJw8zML9pvUCVrICwtePwk7RaIFRUh2g5+tOs/cFQdA2HiP7HKA1NdYAWySTJTxyph1krwNlnaGSACtOnBY7DSR+6YaqwwqOIqPsQ6D+thaF5ZVHpL/LUvQx+j25Ug0p54kUrUfBbkTvs+q8wpeDvkSGOPPMC8gsMK/zvPKgL4Zmg+1yls4ePhNuZP/5PDUHddst6Cr4M/bb3/ZjoL2PLiBJHnaBXkdaS0fEtX35Mpn9zx6WhLAGMXrw5G82Wuvw55lH9JAgAA"
       },
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/CDKMetadata/Default"
@@ -1564,6 +1755,11 @@
     "UserPoolClientId": {
       "Value": {
         "Ref": "SpaceUserPoolSpaceUserPoolClient91C675C0"
+      }
+    },
+    "IdentityPoolId": {
+      "Value": {
+        "Ref": "SpaceIdentityPool"
       }
     }
   },
