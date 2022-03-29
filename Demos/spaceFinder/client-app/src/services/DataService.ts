@@ -1,0 +1,22 @@
+import { Space } from "../model/Model";
+
+export class DataService {
+  public async getSpaces(): Promise<Space[]> {
+    const result: Space[] = [];
+
+    result.push({
+      spaceId: "space1",
+      name: "Space 1",
+      location: "New York",
+      imageUrl: "https://picsum.photos/200/300",
+    });
+    result.push({
+      spaceId: "space2",
+      name: "Space 2",
+      location: "Paris",
+      imageUrl: "https://picsum.photos/200/300",
+    });
+
+    return result;
+  }
+}

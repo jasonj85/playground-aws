@@ -2,6 +2,10 @@ import React from "react";
 import { User } from "../model/Model";
 import { AuthService } from "../services/AuthService";
 import { Login } from "./Login";
+import { Route, Routes } from "react-router-dom";
+import Home from "./Home";
+import Profile from "./Profile";
+import NavBar from "./NavBar";
 
 interface AppState {
   user: User | undefined;
@@ -13,6 +17,7 @@ export class App extends React.Component<{}, AppState> {
   constructor(props: any) {
     super(props);
 
+    this.state = { user: undefined };
     this.setUser = this.setUser.bind(this);
   }
 
@@ -24,9 +29,30 @@ export class App extends React.Component<{}, AppState> {
 
   render() {
     return (
-      <div>
-        <Login authService={this.authService} setUser={this.setUser} />
-        <h1>App!</h1>
+      <div className="wrapper">
+        <NavBar user={this.state.user} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/profile"
+            element={
+              <Profile authService={this.authService} user={this.state.user} />
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Login authService={this.authService} setUser={this.setUser} />
+            }
+          />
+          <Route
+            path="/logout"
+            element={
+              <Login authService={this.authService} setUser={this.setUser} />
+            }
+          />
+          <Route path="*" element={<Home />} />
+        </Routes>
       </div>
     );
   }

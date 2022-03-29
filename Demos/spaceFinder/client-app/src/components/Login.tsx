@@ -1,4 +1,5 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
 import { User } from "../model/Model";
 import { AuthService } from "../services/AuthService";
 
@@ -46,6 +47,7 @@ export class Login extends React.Component<LoginProps, LoginState> {
     if (result) {
       this.setState({ loginSuccessful: true });
       this.props.setUser(result);
+      <Navigate to="/some_route" replace={true} />;
     } else {
       console.log("wrong login");
       this.setState({ loginSuccessful: false });

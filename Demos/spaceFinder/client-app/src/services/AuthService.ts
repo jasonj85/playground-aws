@@ -1,4 +1,4 @@
-import { User } from "../model/Model";
+import { User, UserAttribute } from "../model/Model";
 
 export class AuthService {
   public async login(
@@ -11,5 +11,26 @@ export class AuthService {
         email: "person@email.com",
       };
     } else return undefined;
+  }
+
+  public async logout(): Promise<void> {}
+
+  public async getUserAttributes(user: User): Promise<UserAttribute[]> {
+    const result: UserAttribute[] = [];
+
+    result.push({
+      Name: "email",
+      Value: user.email,
+    });
+    result.push({
+      Name: "jobTitle",
+      Value: "Engineer",
+    });
+    result.push({
+      Name: "age",
+      Value: "20",
+    });
+
+    return result;
   }
 }
