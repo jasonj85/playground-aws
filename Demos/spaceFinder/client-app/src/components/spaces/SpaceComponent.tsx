@@ -1,5 +1,6 @@
 import { Component } from "react";
-import defaultImage from "../../assets/default-image.jpg";
+import "./SpaceComponent.css";
+var defaultImage = require("../../assets/default-image.jpg");
 
 interface SpaceComponentProps {
   spaceId: string;
@@ -20,11 +21,11 @@ export default class SpaceComponent extends Component<SpaceComponentProps> {
 
   render() {
     return (
-      <div>
+      <div className="spaceComponent">
         {this.renderImage()}
-        <label>{this.props.spaceId}</label>
-        <label>{this.props.name}</label>
-        <label>{this.props.location}</label>
+        <label className="name">{this.props.name}</label>
+        <label className="spaceId">{this.props.spaceId}</label>
+        <label className="location">{this.props.location}</label>
         <button onClick={() => this.props.reserveSpace(this.props.spaceId)}>
           Reserve
         </button>

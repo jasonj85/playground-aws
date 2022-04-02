@@ -2,6 +2,7 @@ import { Component } from "react";
 import { Space } from "../../model/Model";
 import { DataService } from "../../services/DataService";
 import SpaceComponent from "./SpaceComponent";
+import ConfirmModalComponent from "./ConfirmModalComponent";
 
 interface SpacesProps {
   dataService: DataService;
@@ -9,6 +10,8 @@ interface SpacesProps {
 
 interface SpacesState {
   spaces: Space[];
+  showModal: boolean;
+  modalContent: string;
 }
 
 export default class Spaces extends Component<SpacesProps, SpacesState> {
@@ -16,9 +19,12 @@ export default class Spaces extends Component<SpacesProps, SpacesState> {
     super(props);
     this.state = {
       spaces: [],
+      showModal: false,
+      modalContent: "",
     };
 
     this.reserveSpace = this.reserveSpace.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   async componentDidMount() {
@@ -26,7 +32,22 @@ export default class Spaces extends Component<SpacesProps, SpacesState> {
     this.setState({ spaces });
   }
 
-  private async reserveSpace(spaceId: string) {}
+  private async reserveSpace(spaceId: string) {
+    const reservationResult = await this.props.dataService.reserveSpace(
+      spaceId
+    );
+    if (reservationResult) {
+      this.setState({
+        showModal: true,
+        modalContent: `Your reservation has been confirmed with reservation Id: ${reservationResult}`,
+      });
+    } else {
+      this.setState({
+        showModal: true,
+        modalContent: "Sorry this space cannot be reserved.",
+      });
+    }
+  }
 
   private renderSpaces() {
     const rows: any[] = [];
@@ -41,6 +62,12 @@ export default class Spaces extends Component<SpacesProps, SpacesState> {
         />
       );
     }
+
+    return rows;
+  }
+
+  private closeModal() {
+    this.setState({ showModal: false, modalContent: "" });
   }
 
   render() {
@@ -48,6 +75,11 @@ export default class Spaces extends Component<SpacesProps, SpacesState> {
       <div>
         <h2>Welcome to the page </h2>
         {this.renderSpaces()}
+        <ConfirmModalComponent
+          show={this.state.showModal}
+          closeModal={this.closeModal}
+          content={this.state.modalContent}
+        />
       </div>
     );
   }
