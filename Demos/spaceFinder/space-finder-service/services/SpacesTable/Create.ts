@@ -1,6 +1,10 @@
 import { DynamoDB } from "aws-sdk";
 import { MissingFieldError, validateAsSpace } from "../Shared/InputValidator";
-import { generateRandomId, getEventBody } from "../Shared/Utils";
+import {
+  generateRandomId,
+  getEventBody,
+  getDefaultResult,
+} from "../Shared/Utils";
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
@@ -14,10 +18,7 @@ async function handler(
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> {
-  const result: APIGatewayProxyResult = {
-    statusCode: 200,
-    body: JSON.stringify("Hello from DynamoDB!"),
-  };
+  const result = getDefaultResult();
 
   try {
     const item = getEventBody(event);

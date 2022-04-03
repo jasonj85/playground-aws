@@ -143,7 +143,7 @@
                           "Ref": "SpaceApi1B373D2B"
                         },
                         "deploymentId": {
-                          "Ref": "SpaceApiDeploymentA2B9E765708eb07d45fb4b49d47133a858cd83ef"
+                          "Ref": "SpaceApiDeploymentA2B9E765bb5703670eb890e49ecb7d8638d5a4ad"
                         },
                         "stageName": "prod"
                       }
@@ -171,194 +171,6 @@
                 "id": "Default",
                 "path": "SpaceFinder/SpaceApi/Default",
                 "children": {
-                  "hello": {
-                    "id": "hello",
-                    "path": "SpaceFinder/SpaceApi/Default/hello",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "SpaceFinder/SpaceApi/Default/hello/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
-                          "aws:cdk:cloudformation:props": {
-                            "parentId": {
-                              "Fn::GetAtt": [
-                                "SpaceApi1B373D2B",
-                                "RootResourceId"
-                              ]
-                            },
-                            "pathPart": "hello",
-                            "restApiId": {
-                              "Ref": "SpaceApi1B373D2B"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
-                          "version": "2.17.0"
-                        }
-                      },
-                      "GET": {
-                        "id": "GET",
-                        "path": "SpaceFinder/SpaceApi/Default/hello/GET",
-                        "children": {
-                          "ApiPermission.SpaceFinderSpaceApi8FB9C275.GET..hello": {
-                            "id": "ApiPermission.SpaceFinderSpaceApi8FB9C275.GET..hello",
-                            "path": "SpaceFinder/SpaceApi/Default/hello/GET/ApiPermission.SpaceFinderSpaceApi8FB9C275.GET..hello",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                              "aws:cdk:cloudformation:props": {
-                                "action": "lambda:InvokeFunction",
-                                "functionName": {
-                                  "Fn::GetAtt": [
-                                    "helloWorldLambdaNodeJsA0564BF5",
-                                    "Arn"
-                                  ]
-                                },
-                                "principal": "apigateway.amazonaws.com",
-                                "sourceArn": {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      "arn:",
-                                      {
-                                        "Ref": "AWS::Partition"
-                                      },
-                                      ":execute-api:",
-                                      {
-                                        "Ref": "AWS::Region"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "AWS::AccountId"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "SpaceApi1B373D2B"
-                                      },
-                                      "/",
-                                      {
-                                        "Ref": "SpaceApiDeploymentStageprodBB8A31FE"
-                                      },
-                                      "/GET/hello"
-                                    ]
-                                  ]
-                                }
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                              "version": "2.17.0"
-                            }
-                          },
-                          "ApiPermission.Test.SpaceFinderSpaceApi8FB9C275.GET..hello": {
-                            "id": "ApiPermission.Test.SpaceFinderSpaceApi8FB9C275.GET..hello",
-                            "path": "SpaceFinder/SpaceApi/Default/hello/GET/ApiPermission.Test.SpaceFinderSpaceApi8FB9C275.GET..hello",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
-                              "aws:cdk:cloudformation:props": {
-                                "action": "lambda:InvokeFunction",
-                                "functionName": {
-                                  "Fn::GetAtt": [
-                                    "helloWorldLambdaNodeJsA0564BF5",
-                                    "Arn"
-                                  ]
-                                },
-                                "principal": "apigateway.amazonaws.com",
-                                "sourceArn": {
-                                  "Fn::Join": [
-                                    "",
-                                    [
-                                      "arn:",
-                                      {
-                                        "Ref": "AWS::Partition"
-                                      },
-                                      ":execute-api:",
-                                      {
-                                        "Ref": "AWS::Region"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "AWS::AccountId"
-                                      },
-                                      ":",
-                                      {
-                                        "Ref": "SpaceApi1B373D2B"
-                                      },
-                                      "/test-invoke-stage/GET/hello"
-                                    ]
-                                  ]
-                                }
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
-                              "version": "2.17.0"
-                            }
-                          },
-                          "Resource": {
-                            "id": "Resource",
-                            "path": "SpaceFinder/SpaceApi/Default/hello/GET/Resource",
-                            "attributes": {
-                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
-                              "aws:cdk:cloudformation:props": {
-                                "httpMethod": "GET",
-                                "resourceId": {
-                                  "Ref": "SpaceApihelloDF776653"
-                                },
-                                "restApiId": {
-                                  "Ref": "SpaceApi1B373D2B"
-                                },
-                                "authorizationType": "COGNITO_USER_POOLS",
-                                "authorizerId": {
-                                  "Ref": "SpaceUserAuthorizer401AE1AA"
-                                },
-                                "integration": {
-                                  "type": "AWS_PROXY",
-                                  "uri": {
-                                    "Fn::Join": [
-                                      "",
-                                      [
-                                        "arn:",
-                                        {
-                                          "Ref": "AWS::Partition"
-                                        },
-                                        ":apigateway:",
-                                        {
-                                          "Ref": "AWS::Region"
-                                        },
-                                        ":lambda:path/2015-03-31/functions/",
-                                        {
-                                          "Fn::GetAtt": [
-                                            "helloWorldLambdaNodeJsA0564BF5",
-                                            "Arn"
-                                          ]
-                                        },
-                                        "/invocations"
-                                      ]
-                                    ]
-                                  },
-                                  "integrationHttpMethod": "POST"
-                                }
-                              }
-                            },
-                            "constructInfo": {
-                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
-                              "version": "2.17.0"
-                            }
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
-                          "version": "2.17.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
-                      "version": "2.17.0"
-                    }
-                  },
                   "spaces": {
                     "id": "spaces",
                     "path": "SpaceFinder/SpaceApi/Default/spaces",
@@ -1237,7 +1049,7 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "e32a2d5db38cca99234887314a932655b2e8ba30ae5083a7fd66f30747648777.zip"
+                      "s3Key": "b7bf94473ed5026abc744905cf5b07e44cef7aa60ee68fad0032485fa830d4b8.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -1426,7 +1238,7 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "128bf4ab9bffd8f03d2b743e5b71415554c73b55e7e6f4e094455d0b69a4d909.zip"
+                      "s3Key": "765ce063c2c558c42dc1967809a81073921bf01580fbbfe731bc79bcd8f15c3c.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -1612,7 +1424,7 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "85fbb09559ce693c7cfb897e2485990ec549ce6b53ee7e31db8572f2864eb944.zip"
+                      "s3Key": "ce003f7e8ecf8e054b9e6cc471519bcf4cbd56dcdf00717ed3504780e4f75103.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -1798,7 +1610,7 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "73917ef73fde76dac2b8f91e2ff27c822118fa9d035660135ba3b7f843748bce.zip"
+                      "s3Key": "564ada780d5cb176faff06729652a5a83eee58231054ee77f27df72ab0005a11.zip"
                     },
                     "role": {
                       "Fn::GetAtt": [
@@ -1826,6 +1638,85 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
+              "version": "2.17.0"
+            }
+          },
+          "spaces-photos": {
+            "id": "spaces-photos",
+            "path": "SpaceFinder/spaces-photos",
+            "children": {
+              "Resource": {
+                "id": "Resource",
+                "path": "SpaceFinder/spaces-photos/Resource",
+                "attributes": {
+                  "aws:cdk:cloudformation:type": "AWS::S3::Bucket",
+                  "aws:cdk:cloudformation:props": {
+                    "bucketName": {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "spaces-photos-",
+                          {
+                            "Fn::Select": [
+                              4,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      2,
+                                      {
+                                        "Fn::Split": [
+                                          "/",
+                                          {
+                                            "Ref": "AWS::StackId"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      ]
+                    },
+                    "corsConfiguration": {
+                      "corsRules": [
+                        {
+                          "allowedHeaders": [
+                            "*"
+                          ],
+                          "allowedMethods": [
+                            "HEAD",
+                            "GET",
+                            "PUT"
+                          ],
+                          "allowedOrigins": [
+                            "*"
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                "constructInfo": {
+                  "fqn": "aws-cdk-lib.aws_s3.CfnBucket",
+                  "version": "2.17.0"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.aws_s3.Bucket",
+              "version": "2.17.0"
+            }
+          },
+          "spaces-photos-bucket-name": {
+            "id": "spaces-photos-bucket-name",
+            "path": "SpaceFinder/spaces-photos-bucket-name",
+            "constructInfo": {
+              "fqn": "aws-cdk-lib.CfnOutput",
               "version": "2.17.0"
             }
           },
@@ -2167,9 +2058,25 @@
                         "policyDocument": {
                           "Statement": [
                             {
-                              "Action": "s3:ListAllMyBuckets",
+                              "Action": [
+                                "s3:PutObject",
+                                "s3:PutObjectAcl"
+                              ],
                               "Effect": "Allow",
-                              "Resource": "*"
+                              "Resource": {
+                                "Fn::Join": [
+                                  "",
+                                  [
+                                    {
+                                      "Fn::GetAtt": [
+                                        "spacesphotos2389D37E",
+                                        "Arn"
+                                      ]
+                                    },
+                                    "/*"
+                                  ]
+                                ]
+                              }
                             }
                           ],
                           "Version": "2012-10-17"
@@ -2272,162 +2179,6 @@
             },
             "constructInfo": {
               "fqn": "aws-cdk-lib.aws_cognito.CfnUserPoolGroup",
-              "version": "2.17.0"
-            }
-          },
-          "helloWorldLambdaNodeJs": {
-            "id": "helloWorldLambdaNodeJs",
-            "path": "SpaceFinder/helloWorldLambdaNodeJs",
-            "children": {
-              "ServiceRole": {
-                "id": "ServiceRole",
-                "path": "SpaceFinder/helloWorldLambdaNodeJs/ServiceRole",
-                "children": {
-                  "Resource": {
-                    "id": "Resource",
-                    "path": "SpaceFinder/helloWorldLambdaNodeJs/ServiceRole/Resource",
-                    "attributes": {
-                      "aws:cdk:cloudformation:type": "AWS::IAM::Role",
-                      "aws:cdk:cloudformation:props": {
-                        "assumeRolePolicyDocument": {
-                          "Statement": [
-                            {
-                              "Action": "sts:AssumeRole",
-                              "Effect": "Allow",
-                              "Principal": {
-                                "Service": "lambda.amazonaws.com"
-                              }
-                            }
-                          ],
-                          "Version": "2012-10-17"
-                        },
-                        "managedPolicyArns": [
-                          {
-                            "Fn::Join": [
-                              "",
-                              [
-                                "arn:",
-                                {
-                                  "Ref": "AWS::Partition"
-                                },
-                                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-                              ]
-                            ]
-                          }
-                        ]
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.CfnRole",
-                      "version": "2.17.0"
-                    }
-                  },
-                  "DefaultPolicy": {
-                    "id": "DefaultPolicy",
-                    "path": "SpaceFinder/helloWorldLambdaNodeJs/ServiceRole/DefaultPolicy",
-                    "children": {
-                      "Resource": {
-                        "id": "Resource",
-                        "path": "SpaceFinder/helloWorldLambdaNodeJs/ServiceRole/DefaultPolicy/Resource",
-                        "attributes": {
-                          "aws:cdk:cloudformation:type": "AWS::IAM::Policy",
-                          "aws:cdk:cloudformation:props": {
-                            "policyDocument": {
-                              "Statement": [
-                                {
-                                  "Action": "s3:ListAllMyBuckets",
-                                  "Effect": "Allow",
-                                  "Resource": "*"
-                                }
-                              ],
-                              "Version": "2012-10-17"
-                            },
-                            "policyName": "helloWorldLambdaNodeJsServiceRoleDefaultPolicyA3DFA918",
-                            "roles": [
-                              {
-                                "Ref": "helloWorldLambdaNodeJsServiceRoleA92626BD"
-                              }
-                            ]
-                          }
-                        },
-                        "constructInfo": {
-                          "fqn": "aws-cdk-lib.aws_iam.CfnPolicy",
-                          "version": "2.17.0"
-                        }
-                      }
-                    },
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_iam.Policy",
-                      "version": "2.17.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_iam.Role",
-                  "version": "2.17.0"
-                }
-              },
-              "Code": {
-                "id": "Code",
-                "path": "SpaceFinder/helloWorldLambdaNodeJs/Code",
-                "children": {
-                  "Stage": {
-                    "id": "Stage",
-                    "path": "SpaceFinder/helloWorldLambdaNodeJs/Code/Stage",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.AssetStaging",
-                      "version": "2.17.0"
-                    }
-                  },
-                  "AssetBucket": {
-                    "id": "AssetBucket",
-                    "path": "SpaceFinder/helloWorldLambdaNodeJs/Code/AssetBucket",
-                    "constructInfo": {
-                      "fqn": "aws-cdk-lib.aws_s3.BucketBase",
-                      "version": "2.17.0"
-                    }
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_s3_assets.Asset",
-                  "version": "2.17.0"
-                }
-              },
-              "Resource": {
-                "id": "Resource",
-                "path": "SpaceFinder/helloWorldLambdaNodeJs/Resource",
-                "attributes": {
-                  "aws:cdk:cloudformation:type": "AWS::Lambda::Function",
-                  "aws:cdk:cloudformation:props": {
-                    "code": {
-                      "s3Bucket": {
-                        "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
-                      },
-                      "s3Key": "4b0e135bc82468192a4d0cebc535aa84844249196355f2ce16f6a9793890afb8.zip"
-                    },
-                    "role": {
-                      "Fn::GetAtt": [
-                        "helloWorldLambdaNodeJsServiceRoleA92626BD",
-                        "Arn"
-                      ]
-                    },
-                    "environment": {
-                      "variables": {
-                        "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1"
-                      }
-                    },
-                    "handler": "index.handler",
-                    "runtime": "nodejs14.x"
-                  }
-                },
-                "constructInfo": {
-                  "fqn": "aws-cdk-lib.aws_lambda.CfnFunction",
-                  "version": "2.17.0"
-                }
-              }
-            },
-            "constructInfo": {
-              "fqn": "aws-cdk-lib.aws_lambda_nodejs.NodejsFunction",
               "version": "2.17.0"
             }
           },

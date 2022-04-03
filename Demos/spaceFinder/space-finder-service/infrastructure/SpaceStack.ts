@@ -1,4 +1,4 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import { Fn, Stack, StackProps, CfnOutput } from "aws-cdk-lib";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import {
   AuthorizationType,
@@ -11,10 +11,14 @@ import { join } from "path";
 import { GenericTable } from "./GenericTable";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { AuthorizerWrapper } from "./auth/AuthorizerWrapper";
+import { Bucket, HttpMethods } from "aws-cdk-lib/aws-s3";
 
 export class SpaceStack extends Stack {
   private api = new RestApi(this, "SpaceApi");
   private authorizer: AuthorizerWrapper;
+  private suffix: string;
+  private spacesPhotosBucket: Bucket;
+
   private spacesTable = new GenericTable(this, {
     tableName: "SpacesTable",
     primaryKey: "spaceId",
@@ -28,21 +32,12 @@ export class SpaceStack extends Stack {
   constructor(scope: Construct, id: string, props: StackProps) {
     super(scope, id, props);
 
-    this.authorizer = new AuthorizerWrapper(this, this.api);
-
-    const helloWorldLambdaNodeJs = new NodejsFunction(
+    this.initializeSuffix();
+    this.iniitializeSpacesPhotosBucket();
+    this.authorizer = new AuthorizerWrapper(
       this,
-      "helloWorldLambdaNodeJs",
-      {
-        entry: join(
-          __dirname,
-          "..",
-          "services",
-          "node-lambda",
-          "helloWorld.ts"
-        ),
-        handler: "handler",
-      }
+      this.api,
+      this.spacesPhotosBucket.bucketArn + "/*"
     );
 
     // add permissions
@@ -50,23 +45,10 @@ export class SpaceStack extends Stack {
     s3ListPolicy.addActions("s3:ListAllMyBuckets");
     s3ListPolicy.addResources("*");
 
-    helloWorldLambdaNodeJs.addToRolePolicy(s3ListPolicy);
-
     const optionsWithAuthorizer: MethodOptions = {
       authorizationType: AuthorizationType.COGNITO,
       authorizer: { authorizerId: this.authorizer.authorizer.authorizerId },
     };
-
-    // Hello World Api Lambda integration
-    const helloWorldLambdaIntegration = new LambdaIntegration(
-      helloWorldLambdaNodeJs
-    );
-    const helloWorldLambdaResource = this.api.root.addResource("hello");
-    helloWorldLambdaResource.addMethod(
-      "GET",
-      helloWorldLambdaIntegration,
-      optionsWithAuthorizer
-    );
 
     // Spaces Api Lambda integration
     const spaceResource = this.api.root.addResource("spaces");
@@ -74,5 +56,28 @@ export class SpaceStack extends Stack {
     spaceResource.addMethod("GET", this.spacesTable.readLambdaIntegration);
     spaceResource.addMethod("PUT", this.spacesTable.updateLambdaIntegration);
     spaceResource.addMethod("DELETE", this.spacesTable.deleteLambdaIntegration);
+  }
+
+  private initializeSuffix() {
+    const shortStackId = Fn.select(2, Fn.split("/", this.stackId));
+    const shortSuffix = Fn.select(4, Fn.split("-", shortStackId));
+    this.suffix = shortSuffix;
+  }
+
+  private iniitializeSpacesPhotosBucket() {
+    this.spacesPhotosBucket = new Bucket(this, "spaces-photos", {
+      bucketName: `spaces-photos-${this.suffix}`,
+      cors: [
+        {
+          allowedMethods: [HttpMethods.HEAD, HttpMethods.GET, HttpMethods.PUT],
+          allowedOrigins: ["*"],
+          allowedHeaders: ["*"],
+        },
+      ],
+    });
+
+    new CfnOutput(this, "spaces-photos-bucket-name", {
+      value: this.spacesPhotosBucket.bucketName,
+    });
   }
 }

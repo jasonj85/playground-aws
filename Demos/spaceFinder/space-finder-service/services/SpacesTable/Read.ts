@@ -5,6 +5,7 @@ import {
   APIGatewayProxyResult,
   Context,
 } from "aws-lambda";
+import { getDefaultResult } from "../Shared/Utils";
 
 const TABLE_NAME = process.env.TABLE_NAME as string;
 const PRIMARY_KEY = process.env.PRIMARY_KEY as string;
@@ -14,10 +15,7 @@ async function handler(
   event: APIGatewayProxyEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> {
-  const result: APIGatewayProxyResult = {
-    statusCode: 200,
-    body: JSON.stringify("Hello from DynamoDB!"),
-  };
+  const result = getDefaultResult();
 
   try {
     if (event.queryStringParameters) {
