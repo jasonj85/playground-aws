@@ -1,5 +1,7 @@
 import { Component, SyntheticEvent } from "react";
 import { DataService } from "../../services/DataService";
+import { User } from '../../model/Model';
+import { Link } from "react-router-dom";
 
 interface CustomEvent {
   target: HTMLInputElement;
@@ -13,6 +15,7 @@ export interface ICreateSpaceState {
 }
 interface ICreateSpaceProps {
   dataService: DataService;
+  user: User | undefined;
 }
 
 export class CreateSpace extends Component<
@@ -61,6 +64,15 @@ export class CreateSpace extends Component<
     } else {
       photoSpace = <div></div>;
     }
+
+    if (!this.props.user) {
+      return (         
+        <Link to="/login">
+          Login to create new spaces
+        </Link>
+      );    
+    }
+
     return (
       <form onSubmit={(e) => this.handleSubmit(e)}>
         <label>

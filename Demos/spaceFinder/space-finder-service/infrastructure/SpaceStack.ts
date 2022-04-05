@@ -1,17 +1,15 @@
 import { Fn, Stack, StackProps, CfnOutput } from "aws-cdk-lib";
-import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import {
   AuthorizationType,
-  LambdaIntegration,
   MethodOptions,
   RestApi,
 } from "aws-cdk-lib/aws-apigateway";
 import { Construct } from "constructs";
-import { join } from "path";
 import { GenericTable } from "./GenericTable";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { AuthorizerWrapper } from "./auth/AuthorizerWrapper";
 import { Bucket, HttpMethods } from "aws-cdk-lib/aws-s3";
+import { WebAppDeployment } from "./WebAppDeployment";
 
 export class SpaceStack extends Stack {
   private api = new RestApi(this, "SpaceApi");
@@ -39,6 +37,8 @@ export class SpaceStack extends Stack {
       this.api,
       this.spacesPhotosBucket.bucketArn + "/*"
     );
+
+    new WebAppDeployment(this, this.suffix);
 
     // add permissions
     const s3ListPolicy = new PolicyStatement();

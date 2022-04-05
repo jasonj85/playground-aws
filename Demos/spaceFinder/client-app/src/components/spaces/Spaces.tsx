@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Space } from "../../model/Model";
+import { Space, User } from "../../model/Model";
 import { DataService } from "../../services/DataService";
 import SpaceComponent from "./SpaceComponent";
 import ConfirmModalComponent from "./ConfirmModalComponent";
@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 interface SpacesProps {
   dataService: DataService;
+  user: User | undefined;
+
 }
 
 interface SpacesState {
@@ -58,6 +60,7 @@ export default class Spaces extends Component<SpacesProps, SpacesState> {
           key={space.spaceId}
           spaceId={space.spaceId}
           location={space.location}
+          photoURL={space.photoURL}
           name={space.name}
           reserveSpace={this.reserveSpace}
         />
@@ -72,10 +75,20 @@ export default class Spaces extends Component<SpacesProps, SpacesState> {
   }
 
   render() {
+    let loggedIn = this.props.user !== undefined;
+
     return (
       <div>
         <h2>Welcome to the page </h2>
-        <Link to="/create-space">Create Space</Link>
+        {loggedIn && (
+          <Link to="/create-space">Create Space</Link>
+        )}
+        {!loggedIn && (
+          <Link to="/login">
+            Login to create new spaces
+          </Link>
+        )}
+   
         <br />
         {this.renderSpaces()}
         <ConfirmModalComponent

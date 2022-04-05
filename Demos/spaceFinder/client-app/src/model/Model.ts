@@ -14,5 +14,5 @@ export interface Space {
   spaceId: string;
   name: string;
   location: string;
-  imageUrl?: string;
+  photoURL?: string;
 }

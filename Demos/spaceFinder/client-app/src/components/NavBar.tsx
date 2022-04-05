@@ -1,7 +1,6 @@
 import { Component } from "react";
 import { User } from "../model/Model";
 import { Link } from "react-router-dom";
-import { userInfo } from "os";
 
 export default class NavBar extends Component<{ user: User | undefined }> {
   render() {

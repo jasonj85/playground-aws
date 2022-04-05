@@ -6,16 +6,18 @@ interface SpaceComponentProps {
   spaceId: string;
   name: string;
   location: string;
-  imageUrl?: string;
+  photoURL?: string;
   reserveSpace: (spaceId: string) => void;
 }
 
 export default class SpaceComponent extends Component<SpaceComponentProps> {
   private renderImage() {
-    if (this.props.imageUrl) {
-      return <img src={this.props.imageUrl} alt={this.props.name} />;
+      console.log(this.props.photoURL)
+
+    if (this.props.photoURL) {
+      return <img src={this.props.photoURL} alt={this.props.name} />;
     } else {
-      return <img src={defaultImage} alt="Default Image" />;
+      return <img src={defaultImage} alt="Default" />;
     }
   }
 

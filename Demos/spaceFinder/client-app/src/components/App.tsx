@@ -45,11 +45,11 @@ export class App extends React.Component<{}, AppState> {
           />
           <Route
             path="/spaces"
-            element={<Spaces dataService={this.dataService} />}
+            element={<Spaces dataService={this.dataService}  user={this.state.user} />}
           />
           <Route
             path="/create-space"
-            element={<CreateSpace dataService={this.dataService} />}
+            element={<CreateSpace dataService={this.dataService} user={this.state.user} />}
           />
           <Route
             path="/login"
