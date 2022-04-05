@@ -21,7 +21,10 @@ function isAuthorized(event: APIGatewayProxyEvent) {
   const groups = event.requestContext.authorizer?.claims["cognito:groups"];
   if (groups) {
     return (groups as string).includes("admins");
-  } else return false;
+  } else 
+  {
+    return false;
+  }
 }
 
 export { handler };
