@@ -1,4 +1,5 @@
 import { Stack, CfnOutput } from "aws-cdk-lib";
+import { CloudFrontWebDistribution } from "aws-cdk-lib/aws-cloudfront";
 import { Bucket } from "aws-cdk-lib/aws-s3";
 import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
 import { join } from "path";
@@ -33,6 +34,30 @@ export class WebAppDeployment {
     new CfnOutput(this.stack, "space-app-web-url", {
       value: this.deploymentBucket.bucketWebsiteUrl,
       exportName: "space-app-web-url",
+    });
+
+    const cloudFront = new CloudFrontWebDistribution(
+      this.stack,
+      "space-app-web-cloudfront",
+      {
+        originConfigs: [
+          {
+            behaviors: [
+              {
+                isDefaultBehavior: true,
+              },
+            ],
+            s3OriginSource: {
+              s3BucketSource: this.deploymentBucket,
+            },
+          },
+        ],
+      }
+    );
+
+    new CfnOutput(this.stack, "space-app-web-cloudfront-url", {
+      value: cloudFront.distributionDomainName,
+      exportName: "space-app-web-cloudfront-url",
     });
   }
 }

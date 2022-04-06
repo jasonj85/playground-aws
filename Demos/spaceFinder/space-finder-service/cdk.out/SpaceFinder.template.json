@@ -1661,7 +1661,7 @@
           }
         ],
         "SourceObjectKeys": [
-          "6384019d60da7434d3cbcfb018345d176b2777293b713fa38e15e3fe1173fcc3.zip"
+          "8d45796491c615b266dd80ee88a05d96b93374a862d0d54eed6e7a00ff17a5be.zip"
         ],
         "DestinationBucketName": {
           "Ref": "spaceappwebidBC88228C"
@@ -1840,10 +1840,61 @@
         "aws:asset:property": "Code"
       }
     },
+    "spaceappwebcloudfrontCFDistributionCDBF0208": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "Compress": true,
+            "ForwardedValues": {
+              "Cookies": {
+                "Forward": "none"
+              },
+              "QueryString": false
+            },
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "DefaultRootObject": "index.html",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "spaceappwebidBC88228C",
+                  "RegionalDomainName"
+                ]
+              },
+              "Id": "origin1",
+              "S3OriginConfig": {}
+            }
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": {
+            "CloudFrontDefaultCertificate": true
+          }
+        }
+      },
+      "Metadata": {
+        "aws:cdk:path": "SpaceFinder/space-app-web-cloudfront/CFDistribution"
+      }
+    },
     "CDKMetadata": {
       "Type": "AWS::CDK::Metadata",
       "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAA/22STVPjMAyGf8veXbMfB7imZXaHGRYYynLtuLYoah0r4w86IZP/jhw3TYblpEdvZMl5rZ/yx6X8/k0dw0Kbw8LiVnbrqPRBsLTpVIM7FeGoWtk9QohVg2L14mZYaU3JRXENjaW2BkZWZxl320HWCvBRSl7DUoUpOfUs/BfiK5ksjUQ7h5H+BfAPRDZUiWWP7+CHC5yzXqCq+Z5kS8McH8iibnNaqBdW1VujZJcl8DWGgORywe/kdDzxrWrBP4Mfvq3R7SxEmipG6IVpnarJsGtPalvmDjDO2TgysA/ybgjnBuEXexsCxCCrHIQ5GyaXSR8gTg72XC27og6uFcyjTlTC9KvzvBe62Ce70cBccuYRVhZPb/e/cmMYMLbj4XmeXa4ib8xr/en8H0+p6fss3afYpDg99/DPeR/Y2dEomy3f8NZpi7I6Bh4/vIJYpRCp/nJVmFfkDJa3yFbLfbh445W+4qXeB8SF5+XEGuRjiR840IHm8AIAAA=="
+        "Analytics": "v2:deflate64:H4sIAAAAAAAA/22Ty27cMAxFv6V7jZq2i3brOEhRoI8gj2Y5kCVmwhlZNPTowDH876Ws8dhIsuLhtURJl/Rn+emrvPigjmGjzWFjsZHDXVT6IFjaDqrDnYpwVL0cbiHEqkNRP7kVVlpTclFcQWepb4GR1VXG1XaQtQK8lZLXcKnCkpxqFv4F8ZlMlmaincNIDwH8DZENVWLZ4wv46QLnbBSoWr4n2VIwxxuyqPucFhqFVW1jlByyBL7FEJBcXnCdnI4n/ql68H/BT9/u0O0sRFpWzDAK0zvVkmHX7lVTzp1gPmfryMA+yN9TOBcIX9jbECAGWeUgzNkweZn0AeLi4Mir5VDUybWC+agTlbA8dZ2PQhf75DAbmJeceYba4ql3b5UfhgFjP29e59nlKvLEPLev9n/3lDo+3lIyT574ZUOd+TrzIzRXGKLHJs2er/NxzMqfFLsUlymZrMpjxA2Z/bW5U1seVm1RVsfAt56aJ+oUIrXvThhzTc5gaWHukNyHj//4T/jG/8I+IG48zzS2IG9L/A+Cmg2HJwMAAA=="
       },
       "Metadata": {
         "aws:cdk:path": "SpaceFinder/CDKMetadata/Default"
@@ -1907,6 +1958,17 @@
       },
       "Export": {
         "Name": "space-app-web-url"
+      }
+    },
+    "spaceappwebcloudfronturl": {
+      "Value": {
+        "Fn::GetAtt": [
+          "spaceappwebcloudfrontCFDistributionCDBF0208",
+          "DomainName"
+        ]
+      },
+      "Export": {
+        "Name": "space-app-web-cloudfront-url"
       }
     }
   },

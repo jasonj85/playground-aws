@@ -36,7 +36,7 @@ export class App extends React.Component<{}, AppState> {
       <div className="wrapper">
         <NavBar user={this.state.user} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Spaces dataService={this.dataService}  user={this.state.user} />} />
           <Route
             path="/profile"
             element={
